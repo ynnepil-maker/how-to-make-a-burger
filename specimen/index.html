@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>字體試排｜How to make a burger</title>
+<title>字體定案｜How to make a burger</title>
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
   :root {
@@ -13,98 +13,93 @@
     --cream: #F9E7C3;
     --yellow: #E8CD6B;
     --brown: #3B2B1A;
-    --ui: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    --paper: #FFF9EA;
+
+    --font: 'Nunito', 'Chiron GoRound TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+
+    /* 三個層級：標題、內文、註解 */
+    --title-w: 800;
+    --title-size: clamp(30px, 8.4vw, 52px);
+    --title-sm: clamp(22px, 5.8vw, 28px);
+    --title-lh: 1.22;
+
+    --body-w: 450;
+    --body-size: clamp(16.5px, 4.4vw, 18px);
+    --body-lh: 1.85;
+
+    --note-w: 500;
+    --note-size: clamp(13px, 3.5vw, 14px);
+    --note-lh: 1.7;
+    --note-ls: .04em;
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0; background: var(--cream); color: var(--green);
-    font-family: var(--ui); font-weight: 400; line-height: 1.7;
+    font-family: var(--font); font-weight: var(--body-w); font-size: var(--body-size); line-height: var(--body-lh);
   }
   .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
 
+  /* 三個層級的樣式 */
+  .t-title { font-weight: var(--title-w); font-size: var(--title-size); line-height: var(--title-lh); margin: 0; text-wrap: balance; }
+  .t-title-sm { font-weight: var(--title-w); font-size: var(--title-sm); line-height: 1.3; margin: 0; text-wrap: balance; }
+  .t-body { font-weight: var(--body-w); font-size: var(--body-size); line-height: var(--body-lh); margin: 0; text-wrap: pretty; }
+  .t-body strong { font-weight: 700; }
+  .t-note { font-weight: var(--note-w); font-size: var(--note-size); line-height: var(--note-lh); letter-spacing: var(--note-ls); margin: 0; color: var(--brown); }
+  .nb { display: inline-block; }
+
   /* 頁首 */
-  .top { background: var(--green); color: var(--cream); padding: 48px 0 40px; position: relative; overflow: hidden; }
+  .top { background: var(--green); color: var(--cream); padding: 52px 0 44px; position: relative; overflow: hidden; }
   .top::after {
-    content: ""; position: absolute; right: -70px; top: -70px; width: 190px; height: 190px;
+    content: ""; position: absolute; right: -80px; top: -112px; width: 170px; height: 170px;
     border-radius: 50%; background: var(--orange);
   }
   .top .wrap { position: relative; z-index: 1; }
-  .kicker { margin: 0 0 8px; font-weight: 700; letter-spacing: .2em; color: var(--yellow); font-size: 14px; }
-  .top h1 { margin: 0 0 16px; font-weight: 700; font-size: 40px; line-height: 1.2; }
-  .top p { margin: 0; max-width: 30em; font-size: 16px; }
+  .top .t-note { color: var(--yellow); font-weight: 700; letter-spacing: .2em; margin-bottom: 8px; }
+  .top .t-title { margin-bottom: 16px; }
+  .top .t-body { max-width: 30em; }
 
-  /* 每組配對 */
-  .pair { padding: 48px 0 8px; }
-  .tag { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; }
-  .tag .no {
-    font-family: var(--ui); font-weight: 700; font-size: 14px; letter-spacing: .08em;
-    background: var(--green); color: var(--cream); padding: 2px 12px; border-radius: 999px;
-  }
-  .tag .name { font-family: var(--ui); font-weight: 700; font-size: 18px; }
+  section.blk { padding: 52px 0 4px; }
+  .label { display: inline-block; background: var(--green); color: var(--cream); font-weight: 700; font-size: var(--note-size); letter-spacing: .08em; padding: 2px 14px; border-radius: 999px; margin: 0 0 18px; }
 
-  .sheet {
-    background: #fff9ea; border: 2px solid var(--green); padding: 32px 26px 28px;
-    box-shadow: 10px 10px 0 var(--yellow);
-  }
-  .latin { margin: 0 0 6px; font-size: 22px; line-height: 1.2; color: var(--orange); }
-  .zh-title { margin: 0; font-size: 36px; line-height: 1.25; text-wrap: balance; }
-  .nb { display: inline-block; }
-  .body, .sub { text-wrap: pretty; }
-  .sub { margin: 12px 0 0; font-size: 17px; }
-  .rule { border: 0; border-top: 2px solid var(--green); margin: 24px 0 20px; }
-  .chapter { margin: 0 0 10px; font-size: 17px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-  .chip { background: var(--orange); color: var(--green); font-weight: 700; font-size: 14px; padding: 1px 12px; }
-  .body { margin: 0; font-size: 17px; line-height: 1.85; }
+  /* 規格卡 */
+  .spec { background: var(--paper); border: 2px solid var(--green); padding: 24px 24px 22px; margin: 0 0 22px; box-shadow: 8px 8px 0 var(--yellow); }
+  .spec .row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .spec .lv { font-weight: 800; font-size: 15px; background: var(--yellow); padding: 1px 12px; }
+  .spec dl { display: grid; grid-template-columns: 5.5em 1fr; gap: 2px 12px; margin: 16px 0 0; font-size: var(--note-size); line-height: var(--note-lh); letter-spacing: var(--note-ls); font-weight: var(--note-w); color: var(--brown); }
+  .spec dt { font-weight: 700; color: var(--green); }
+  .spec dd { margin: 0; }
 
-  .panel { background: var(--green); color: var(--cream); margin-top: 36px; padding: 26px 26px 22px; }
-  .panel .q { margin: 0 0 14px; font-size: 17px; }
+  /* 實際畫面 */
+  .sheet { background: var(--paper); border: 2px solid var(--green); padding: 32px 26px 26px; box-shadow: 10px 10px 0 var(--yellow); }
+  .chapter { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 14px; }
+  .chip { background: var(--yellow); color: var(--green); font-weight: 700; font-size: var(--note-size); letter-spacing: .06em; padding: 1px 12px; border: 2px solid var(--green); }
+  .rule { border: 0; border-top: 2px solid var(--green); margin: 22px 0 18px; }
+  .panel { background: var(--green); color: var(--cream); margin-top: 30px; padding: 24px 24px 20px; }
+  .panel .t-body { margin-bottom: 14px; }
   .opts { display: flex; flex-wrap: wrap; gap: 10px; }
-  .opts button {
-    font: inherit; font-size: 16px; color: var(--green); background: var(--yellow);
-    border: 2px solid var(--cream); padding: 8px 18px; cursor: pointer;
-  }
-  .opts button.go { background: var(--orange); }
-  .nums { margin: 20px 0 0; font-size: 28px; letter-spacing: .12em; color: var(--yellow); }
-  .small { margin: 14px 0 0; font-size: 13px; opacity: .85; }
+  .opts button { font: inherit; font-weight: 700; font-size: var(--body-size); color: var(--green); background: var(--yellow); border: 2px solid var(--cream); padding: 8px 18px; cursor: pointer; }
+  .opts button.alt { background: var(--cream); }
+  .panel .t-note { color: var(--cream); opacity: .88; margin-top: 16px; }
 
-  .spec { margin: 22px 0 0; font-family: var(--ui); font-size: 13px; line-height: 1.7; color: var(--brown); }
-  .spec b { font-weight: 700; }
+  /* 字重階梯 */
+  .ladder { background: var(--paper); border: 2px solid var(--green); padding: 8px 24px; }
+  .ladder .w { display: grid; grid-template-columns: 3.2em 1fr; align-items: baseline; gap: 12px; padding: 10px 0; border-bottom: 1px dashed rgba(15,61,36,.3); font-size: clamp(20px, 5.4vw, 26px); line-height: 1.4; }
+  .ladder .w:last-child { border-bottom: 0; }
+  .ladder .n { font-size: 13px; letter-spacing: .04em; color: var(--brown); font-weight: 700; }
+  .ladder .used .n::after { content: " ●"; color: var(--orange); }
 
-  .foot { padding: 56px 0 72px; font-size: 14px; color: var(--brown); }
+  /* 混排檢查 */
+  .mix { background: var(--paper); border: 2px solid var(--green); padding: 22px 24px; }
+  .mix p + p { margin-top: 12px; }
 
-  /* 五組字體 */
-  .p1 .latin { font-family: 'Fraunces', serif; font-weight: 900; }
-  .p1 .zh-title, .p1 .opts button { font-family: 'Noto Serif TC', serif; font-weight: 900; }
-  .p1 .nums { font-family: 'Fraunces', serif; font-weight: 900; }
-  .p1 .sub, .p1 .body, .p1 .chapter, .p1 .q, .p1 .small { font-family: 'Noto Sans TC', var(--ui); font-weight: 400; }
-  .p1 .chip { font-family: 'Noto Sans TC', var(--ui); font-weight: 700; }
-
-  .p2 .latin, .p2 .nums { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; }
-  .p2 .zh-title, .p2 .opts button { font-family: 'Huninn', var(--ui); font-weight: 400; }
-  .p2 .sub, .p2 .body, .p2 .chapter, .p2 .q, .p2 .small { font-family: 'Noto Sans TC', var(--ui); font-weight: 400; }
-  .p2 .chip { font-family: 'Huninn', var(--ui); font-weight: 400; }
-
-  .p3 .latin, .p3 .nums { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; }
-  .p3 .zh-title, .p3 .opts button, .p3 .chip { font-family: 'Noto Sans TC', var(--ui); font-weight: 900; }
-  .p3 .sub, .p3 .body, .p3 .chapter, .p3 .q, .p3 .small { font-family: 'Noto Sans TC', var(--ui); font-weight: 400; }
-
-  .p4 .latin, .p4 .nums, .p4 .zh-title, .p4 .opts button, .p4 .chip { font-family: 'LXGW WenKai TC', serif; font-weight: 700; }
-  .p4 .sub, .p4 .body, .p4 .chapter, .p4 .q, .p4 .small { font-family: 'LXGW WenKai TC', serif; font-weight: 400; }
-  .p4 .zh-title { font-size: 38px; }
-
-  .p5 .latin, .p5 .nums { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; }
-  .p5 .zh-title, .p5 .opts button, .p5 .chip { font-family: 'Iansui', var(--ui); font-weight: 400; }
-  .p5 .sub, .p5 .body, .p5 .chapter, .p5 .q, .p5 .small { font-family: 'Noto Sans TC', var(--ui); font-weight: 400; }
-  .p5 .zh-title { font-size: 40px; }
+  .foot { padding: 52px 0 72px; }
 
   @media (min-width: 720px) {
-    .top h1 { font-size: 56px; }
-    .zh-title { font-size: 48px; }
-    .p4 .zh-title { font-size: 50px; }
-    .p5 .zh-title { font-size: 52px; }
-    .sheet { padding: 44px 44px 36px; }
-    .panel { padding: 32px 44px 28px; }
+    .spec { padding: 28px 32px 24px; }
+    .sheet { padding: 44px 44px 34px; }
+    .panel { padding: 30px 44px 26px; }
+    .ladder, .mix { padding-left: 32px; padding-right: 32px; }
   }
 </style>
 </head>
@@ -112,113 +107,98 @@
 
 <header class="top">
   <div class="wrap">
-    <p class="kicker">字體試排</p>
-    <h1>請選一組</h1>
-    <p>下面五組都用站上的真實文案與色票。每組字體都是開源授權，會內嵌在網站裡，所有人看到的都一樣。請在手機與電腦上都看看，選好後回覆 P1 到 P5。</p>
+    <p class="t-note">字體定案</p>
+    <h1 class="t-title">昭源環方 × Nunito</h1>
+    <p class="t-body">中文用昭源環方，英文與數字用 Nunito。兩者都是開源字體，內嵌在網站裡，所有人看到的字體一致。下面是依「標題、內文、註解」三個層級訂出的規格，請在手機與電腦上都看看。</p>
   </div>
 </header>
 
 <main class="wrap">
 
-  <section class="pair p1" id="p1">
-    <div class="tag"><span class="no">P1</span><span class="name">編輯印刷感</span></div>
-    <div class="sheet">
-      <p class="latin">How to make a burger</p>
-      <h2 class="zh-title"><span class="nb">料理小白的</span><span class="nb">第一顆漢堡</span></h2>
-      <p class="sub">從完全不會煮菜，到做出自己的招牌漢堡套餐</p>
-      <hr class="rule">
-      <p class="chapter"><span class="chip">第 3 關</span>學點餐：提示詞與品味</p>
-      <p class="body">「來個漢堡」，和「雙層牛肉、烤吐司、辣醬、不加洋蔥，外帶，兩人份」，對同一位老師說，得到的答案差很多。點單越具體，結果越接近你要的。</p>
+  <section class="blk">
+    <p class="label">三個層級</p>
+
+    <div class="spec">
+      <div class="row"><span class="lv">標題</span><span class="t-note">字重 800</span></div>
+      <h2 class="t-title"><span class="nb">料理小白的</span><span class="nb">第一顆漢堡</span></h2>
+      <dl>
+        <dt>字級</dt><dd>手機約 30 到 36 px，電腦最大 52 px</dd>
+        <dt>行高</dt><dd>1.22</dd>
+        <dt>顏色</dt><dd>深綠；放在深綠底上時用奶油</dd>
+        <dt>用於</dt><dd>章節大標、卡片標題、按鈕文字（按鈕用 700）</dd>
+      </dl>
     </div>
-    <div class="panel">
-      <p class="q">老師是在「翻資料庫」，還是「憑經驗接話」？</p>
-      <div class="opts"><button type="button">A　翻資料庫</button><button type="button" class="go">B　憑經驗接話</button></div>
-      <p class="nums">01 02 03 04 05 06 07 08 09</p>
-      <p class="small">本站圖片由 AI 生成</p>
+
+    <div class="spec">
+      <div class="row"><span class="lv">內文</span><span class="t-note">字重 450</span></div>
+      <p class="t-body">「來個漢堡」，和「雙層牛肉、烤吐司、辣醬、不加洋蔥，外帶，兩人份」，對同一位老師說，得到的答案差很多。點單越具體，<strong>結果越接近你要的</strong>。</p>
+      <dl>
+        <dt>字級</dt><dd>手機約 17 px，電腦 18 px</dd>
+        <dt>行高</dt><dd>1.85</dd>
+        <dt>顏色</dt><dd>深綠</dd>
+        <dt>用於</dt><dd>故事敘述、題目、說明；重點用 700 加粗</dd>
+        <dt>行寬</dt><dd>一行最多約 30 個全形字</dd>
+      </dl>
     </div>
-    <p class="spec"><b>標題</b> Noto Serif TC 900　<b>內文</b> Noto Sans TC 400　<b>英文與數字</b> Fraunces 900</p>
+
+    <div class="spec">
+      <div class="row"><span class="lv">註解</span><span class="t-note">字重 500</span></div>
+      <p class="t-note">本站圖片由 AI 生成。程式碼與文字採開源授權，圖片不在開源範圍。</p>
+      <dl>
+        <dt>字級</dt><dd>手機約 13 px，電腦 14 px，不再更小</dd>
+        <dt>行高</dt><dd>1.7，字距加寬 0.04em</dd>
+        <dt>顏色</dt><dd>深棕（對比度 11.2）；放在深綠底上時用奶油</dd>
+        <dt>用於</dt><dd>圖說、來源、授權、頁尾、小標籤</dd>
+      </dl>
+    </div>
   </section>
 
-  <section class="pair p2" id="p2">
-    <div class="tag"><span class="no">P2</span><span class="name">圓潤親切</span></div>
+  <section class="blk">
+    <p class="label">實際畫面（第 3 關）</p>
     <div class="sheet">
-      <p class="latin">How to make a burger</p>
-      <h2 class="zh-title"><span class="nb">料理小白的</span><span class="nb">第一顆漢堡</span></h2>
-      <p class="sub">從完全不會煮菜，到做出自己的招牌漢堡套餐</p>
+      <p class="chapter"><span class="chip">第 3 關</span><span class="t-note">學點餐：提示詞與品味</span></p>
+      <h2 class="t-title"><span class="nb">同一份點單，</span><span class="nb">煎兩次也不同</span></h2>
       <hr class="rule">
-      <p class="chapter"><span class="chip">第 3 關</span>學點餐：提示詞與品味</p>
-      <p class="body">「來個漢堡」，和「雙層牛肉、烤吐司、辣醬、不加洋蔥，外帶，兩人份」，對同一位老師說，得到的答案差很多。點單越具體，結果越接近你要的。</p>
+      <p class="t-body">小白發現，成品看起來跟別人的差不多，但又有點不一樣。原因有兩種：<strong>正常的隨機</strong>，或是他自己想試試不同的變因。最後要留哪一個，是小白的品味決定的。</p>
     </div>
     <div class="panel">
-      <p class="q">老師是在「翻資料庫」，還是「憑經驗接話」？</p>
-      <div class="opts"><button type="button">A　翻資料庫</button><button type="button" class="go">B　憑經驗接話</button></div>
-      <p class="nums">01 02 03 04 05 06 07 08 09</p>
-      <p class="small">本站圖片由 AI 生成</p>
+      <p class="t-body">這次的差異，是來自「隨機」，還是「改了點單」？</p>
+      <div class="opts"><button type="button">A　隨機</button><button type="button" class="alt">B　改了點單</button></div>
+      <p class="t-note">答對的話，下一題會更難一點。</p>
     </div>
-    <p class="spec"><b>標題</b> jf open 粉圓（Huninn）　<b>內文</b> Noto Sans TC 400　<b>英文與數字</b> Bricolage Grotesque 800</p>
   </section>
 
-  <section class="pair p3" id="p3">
-    <div class="tag"><span class="no">P3</span><span class="name">粗黑海報感</span></div>
-    <div class="sheet">
-      <p class="latin">How to make a burger</p>
-      <h2 class="zh-title"><span class="nb">料理小白的</span><span class="nb">第一顆漢堡</span></h2>
-      <p class="sub">從完全不會煮菜，到做出自己的招牌漢堡套餐</p>
-      <hr class="rule">
-      <p class="chapter"><span class="chip">第 3 關</span>學點餐：提示詞與品味</p>
-      <p class="body">「來個漢堡」，和「雙層牛肉、烤吐司、辣醬、不加洋蔥，外帶，兩人份」，對同一位老師說，得到的答案差很多。點單越具體，結果越接近你要的。</p>
+  <section class="blk">
+    <p class="label">字重階梯</p>
+    <div class="ladder">
+      <div class="w" style="font-weight:200"><span class="n">200</span><span>料理小白 How to make a burger 0123</span></div>
+      <div class="w" style="font-weight:300"><span class="n">300</span><span>料理小白 How to make a burger 0123</span></div>
+      <div class="w" style="font-weight:400"><span class="n">400</span><span>料理小白 How to make a burger 0123</span></div>
+      <div class="w used" style="font-weight:450"><span class="n">450</span><span>料理小白 How to make a burger 0123</span></div>
+      <div class="w used" style="font-weight:500"><span class="n">500</span><span>料理小白 How to make a burger 0123</span></div>
+      <div class="w" style="font-weight:600"><span class="n">600</span><span>料理小白 How to make a burger 0123</span></div>
+      <div class="w used" style="font-weight:700"><span class="n">700</span><span>料理小白 How to make a burger 0123</span></div>
+      <div class="w used" style="font-weight:800"><span class="n">800</span><span>料理小白 How to make a burger 0123</span></div>
+      <div class="w" style="font-weight:900"><span class="n">900</span><span>料理小白 How to make a burger 0123</span></div>
     </div>
-    <div class="panel">
-      <p class="q">老師是在「翻資料庫」，還是「憑經驗接話」？</p>
-      <div class="opts"><button type="button">A　翻資料庫</button><button type="button" class="go">B　憑經驗接話</button></div>
-      <p class="nums">01 02 03 04 05 06 07 08 09</p>
-      <p class="small">本站圖片由 AI 生成</p>
-    </div>
-    <p class="spec"><b>標題</b> Noto Sans TC 900　<b>內文</b> Noto Sans TC 400　<b>英文與數字</b> Bricolage Grotesque 800</p>
+    <p class="t-note" style="margin-top:12px">橘點標示的是這套規格實際使用的字重：450 內文、500 註解、700 加粗與按鈕、800 標題。</p>
   </section>
 
-  <section class="pair p4" id="p4">
-    <div class="tag"><span class="no">P4</span><span class="name">手寫繪本感</span></div>
-    <div class="sheet">
-      <p class="latin">How to make a burger</p>
-      <h2 class="zh-title"><span class="nb">料理小白的</span><span class="nb">第一顆漢堡</span></h2>
-      <p class="sub">從完全不會煮菜，到做出自己的招牌漢堡套餐</p>
-      <hr class="rule">
-      <p class="chapter"><span class="chip">第 3 關</span>學點餐：提示詞與品味</p>
-      <p class="body">「來個漢堡」，和「雙層牛肉、烤吐司、辣醬、不加洋蔥，外帶，兩人份」，對同一位老師說，得到的答案差很多。點單越具體，結果越接近你要的。</p>
+  <section class="blk">
+    <p class="label">中英數混排檢查</p>
+    <div class="mix">
+      <p class="t-title-sm">第 3 關｜Prompt 提示詞 · AI 生成</p>
+      <p class="t-body">預算 150 元，12:30 開會，請列出 3 個午餐選項，並用 Markdown 表格呈現。</p>
+      <p class="t-note">01 02 03 04 05 06 07 08 09 · NT$150 · 2026-11-03 · MIT / CC BY 4.0</p>
     </div>
-    <div class="panel">
-      <p class="q">老師是在「翻資料庫」，還是「憑經驗接話」？</p>
-      <div class="opts"><button type="button">A　翻資料庫</button><button type="button" class="go">B　憑經驗接話</button></div>
-      <p class="nums">01 02 03 04 05 06 07 08 09</p>
-      <p class="small">本站圖片由 AI 生成</p>
-    </div>
-    <p class="spec"><b>全部</b> LXGW WenKai TC（霞鶩文楷，標題 700、內文 400）</p>
-  </section>
-
-  <section class="pair p5" id="p5">
-    <div class="tag"><span class="no">P5</span><span class="name">手寫圓潤</span></div>
-    <div class="sheet">
-      <p class="latin">How to make a burger</p>
-      <h2 class="zh-title"><span class="nb">料理小白的</span><span class="nb">第一顆漢堡</span></h2>
-      <p class="sub">從完全不會煮菜，到做出自己的招牌漢堡套餐</p>
-      <hr class="rule">
-      <p class="chapter"><span class="chip">第 3 關</span>學點餐：提示詞與品味</p>
-      <p class="body">「來個漢堡」，和「雙層牛肉、烤吐司、辣醬、不加洋蔥，外帶，兩人份」，對同一位老師說，得到的答案差很多。點單越具體，結果越接近你要的。</p>
-    </div>
-    <div class="panel">
-      <p class="q">老師是在「翻資料庫」，還是「憑經驗接話」？</p>
-      <div class="opts"><button type="button">A　翻資料庫</button><button type="button" class="go">B　憑經驗接話</button></div>
-      <p class="nums">01 02 03 04 05 06 07 08 09</p>
-      <p class="small">本站圖片由 AI 生成</p>
-    </div>
-    <p class="spec"><b>標題</b> 芫荽（Iansui）　<b>內文</b> Noto Sans TC 400　<b>英文與數字</b> Bricolage Grotesque 800</p>
   </section>
 
 </main>
 
 <footer class="foot">
-  <div class="wrap">這是字體試排頁，不是正式內容。所有字體均為 SIL Open Font License 授權，授權檔放在 fonts/licenses 資料夾。</div>
+  <div class="wrap">
+    <p class="t-note">昭源環方（Chiron GoRound TC）與 Nunito 皆為 SIL Open Font License 1.1 授權。授權檔放在 fonts/licenses 資料夾。這是字體規格頁，不是正式內容。</p>
+  </div>
 </footer>
 
 </body>
