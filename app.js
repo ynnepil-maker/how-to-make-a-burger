@@ -24,7 +24,7 @@
 
   /* ───── 小工具 ───── */
   function frame(file, alt, cls) {
-    return '<div class="frame ' + (cls || '') + '"><img src="images/' + esc(file) + '" alt="' + esc(alt || '') + '" loading="eager" decoding="async"></div>';
+    return '<div class="frame ' + (cls || '') + '"><img src="images/' + esc(file) + '" alt="' + esc(alt || '') + '" loading="eager" decoding="async" width="4" height="3"></div>';
   }
   function paras(arr) { return (arr && arr.length) ? '<div class="body">' + arr.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>' : ''; }
   function note(t) { return t ? '<p class="note">' + t + '</p>' : ''; }
