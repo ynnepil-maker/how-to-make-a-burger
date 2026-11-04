@@ -5,7 +5,7 @@ window.SITE = {
   title: 'How to make a burger',
   subtitle: '一個給 AI 新手的互動小教室',
   footer: '插圖由 AI 生成。實拍照片：拍攝後經詢問店家後，同意搭配此網頁內容使用。程式碼採 MIT 授權、文字採 CC BY 4.0（授權說明之後會再整理）。字體：昭源環方、Nunito（SIL OFL 1.1）。',
-  guestbookUrl: '',   // 留言板的 Apps Script 網址（部署後填入）；空白時顯示「留言板還沒開放」
+  guestbookUrl: 'https://script.google.com/macros/s/AKfycbxGnO8dD3jjz3GpGBKk9w6FzAs1-EsTz2fK4NlXTaHJvZhMIZZ-EnG3C7-yW4bo093H_Q/exec',   // 留言板的 Apps Script 網址（部署後填入）；空白時顯示「留言板還沒開放」
   ok: '對了。',
   bad: '差一點，再看看。'
 };

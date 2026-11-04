@@ -8,6 +8,7 @@
  * 只保存三欄：時間、暱稱、留言。不記錄 IP、不使用 Cookie。
  * 想刪掉不當留言，直接在試算表刪那一列即可。
  */
+var SHEET_ID = '1aGXMTYXXLL2MtNM_uwotGM6T8TrJnm1tsqAHHB9gjM8';   // 試算表 ID；若程式是從試算表內「擴充功能 → Apps Script」建立的，這裡可留空字串
 var SHEET_NAME = '留言';
 var MAX_NICK = 20;
 var MAX_MSG = 100;
@@ -15,7 +16,7 @@ var SHOW_LAST = 50;
 var MIN_GAP_MS = 3000;   // 全站兩則留言之間至少間隔 3 秒，擋掉連發
 
 function getSheet_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
