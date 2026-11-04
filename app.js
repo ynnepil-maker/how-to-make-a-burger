@@ -19,6 +19,18 @@
   var mem = {};      // 各畫面暫存的作答狀態（只在這次瀏覽中存在）
   var choice = {};   // 跨畫面的選擇，例如第 5 關的動機
 
+  /* 斷句：中文沒有字詞邊界，瀏覽器會在任何兩個字之間換行。
+     標題用「|」標出可以換行的位置；題目與選項則在標點後自動斷開（每段不超過 13 字才當成一個整體）。 */
+  function phr(str) {
+    if (str.indexOf('|') < 0) return str;
+    return str.split('|').map(function (p) { return '<span class="nb">' + p + '</span>'; }).join('');
+  }
+  function autoPhr(str) {
+    if (/[<>]/.test(str)) return str;
+    var parts = str.split(/(?<=[，、：；？。！])/);
+    if (parts.length < 2) return str;
+    return parts.map(function (p) { return [...p].length <= 13 ? '<span class="nb">' + p + '</span>' : p; }).join('');
+  }
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function html(el, h) { el.innerHTML = h; }
 
@@ -29,7 +41,7 @@
   function paras(arr) { return (arr && arr.length) ? '<div class="body">' + arr.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>' : ''; }
   function note(t) { return t ? '<p class="note">' + t + '</p>' : ''; }
   function chip(i) { var f = flat[i]; return '<p class="chip">' + esc(f.ch.tag) + (f.ch.id === 'p' || f.ch.id === 'end' ? '' : '・' + f.ch.name.split('：')[0]) + '</p>'; }
-  function head(i, s) { return chip(i) + '<h2 class="title">' + s.title + '</h2>'; }
+  function head(i, s) { return chip(i) + '<h2 class="title">' + phr(s.title) + '</h2>'; }
   function fb(kind, text) {
     return '<p class="fb ' + kind + '" role="status"><span class="fb-mk" aria-hidden="true">' + (kind === 'ok' ? '✓' : '✗') + '</span>' + text + '</p>';
   }
@@ -68,7 +80,7 @@
     render: function (i, s) {
       var h = head(i, s);
       if (s.img) h += frame(s.img, s.alt);
-      if (s.gallery) h += '<div class="gallery" style="--n:' + Math.min(s.gallery.length, 3) + '">' + s.gallery.map(function (g) { return '<figure>' + frame(g.img, g.cap) + '<figcaption>' + g.cap + '</figcaption></figure>'; }).join('') + '</div>';
+      if (s.gallery) h += '<div class="gallery" style="--n:' + Math.min(s.gallery.length, 3) + '">' + s.gallery.map(function (g) { return '<figure>' + frame(g.img, g.cap, g.fit === 'cover' ? 'cover' : '') + '<figcaption>' + g.cap + '</figcaption></figure>'; }).join('') + '</div>';
       if (s.envelope) h += '<div class="env">' + envelopeSVG() + '</div>';
       if (s.dialog) h += '<div class="bubbles">' + s.dialog.map(function (d, k) {
         var right = d.who !== s.dialog[0].who;
@@ -106,7 +118,7 @@
       h += '<div class="q"><div class="opts" role="group" aria-label="選項">' + s.options.map(function (o, k) {
         var cls = '';
         if (m.pick === k && !s.noFb) cls = o.ok ? ' right' : ' wrong';
-        return '<button class="opt' + cls + '" type="button" data-k="' + k + '" aria-pressed="' + (m.pick === k) + '"><span class="mk" aria-hidden="true"></span><span>' + o.t + '</span></button>';
+        return '<button class="opt' + cls + '" type="button" data-k="' + k + '" aria-pressed="' + (m.pick === k) + '"><span class="mk" aria-hidden="true"></span><span>' + autoPhr(o.t) + '</span></button>';
       }).join('') + '</div></div>';
       h += '<div id="fbBox">' + (m.pick != null && !s.noFb ? fb(s.options[m.pick].ok ? 'ok' : 'bad', s.options[m.pick].fb) : '') + '</div>';
       return h;
@@ -131,7 +143,7 @@
       h += paras(s.body);
       if (s.context) h += '<p class="q-ctx">' + s.context + '</p>';
       h += s.questions.map(function (q, qi) {
-        return '<div class="q"><p class="q-t">' + (s.questions.length > 1 ? (qi + 1) + '．' : '') + q.q + '</p><div class="opts' + (q.options.length <= 4 && q.options.join('').length < 22 ? ' inline' : '') + '" role="group">' + q.options.map(function (o, k) {
+        return '<div class="q"><p class="q-t">' + (s.questions.length > 1 ? (qi + 1) + '．' : '') + autoPhr(q.q) + '</p><div class="opts' + (q.options.length <= 4 && q.options.join('').length < 22 ? ' inline' : '') + '" role="group">' + q.options.map(function (o, k) {
           var cls = '';
           if (m.checked && m.a[qi] === k) cls = (k === q.a) ? ' right' : ' wrong';
           return '<button class="opt' + cls + '" type="button" data-q="' + qi + '" data-k="' + k + '" aria-pressed="' + (m.a[qi] === k) + '"' + (m.result === 'ok' ? ' disabled' : '') + '><span class="mk" aria-hidden="true"></span><span>' + o + '</span></button>';
@@ -166,7 +178,7 @@
         var cls = '';
         if (m.checked) cls = (m.z[k] === c.z) ? ' right' : ' wrong';
         return '<div class="cc' + (c.icon ? '' : ' noicon') + cls + '">' + (c.icon ? '<img class="ic" src="images/' + c.icon + '" alt="" loading="eager">' : '') +
-          '<span class="ct">' + c.t + '</span><div class="zs" role="group" aria-label="' + esc(c.t) + '">' + s.zones.map(function (z, zi) {
+          '<span class="ct">' + autoPhr(c.t) + '</span><div class="zs" role="group" aria-label="' + esc(c.t) + '">' + s.zones.map(function (z, zi) {
             return '<button class="zbtn" type="button" data-c="' + k + '" data-z="' + zi + '" aria-pressed="' + (m.z[k] === zi) + '">' + z + '</button>';
           }).join('') + '</div>' + (m.checked ? '<p class="res">' + ((m.z[k] === c.z) ? '✓ 放對了' : '✗ 再想想') + '</p>' : '') + '</div>';
       }).join('') + '</div>';
@@ -198,7 +210,7 @@
       h += '<ol class="steps">' + m.order.map(function (idx) {
         var pos = m.seq.indexOf(idx), cls = '';
         if (m.checked && pos > -1) cls = (pos === idx) ? ' right' : ' wrong';
-        return '<li><button class="stp' + cls + '" type="button" data-k="' + idx + '" aria-pressed="' + (pos > -1) + '"><span class="num" aria-hidden="true">' + (pos > -1 ? pos + 1 : '') + '</span><span>' + s.steps[idx] + '</span></button></li>';
+        return '<li><button class="stp' + cls + '" type="button" data-k="' + idx + '" aria-pressed="' + (pos > -1) + '"><span class="num" aria-hidden="true">' + (pos > -1 ? pos + 1 : '') + '</span><span>' + autoPhr(s.steps[idx]) + '</span></button></li>';
       }).join('') + '</ol>';
       var all = m.seq.length === s.steps.length;
       h += '<div class="actions"><button class="btn" type="button" id="chk"' + (all && m.result !== 'ok' ? '' : ' disabled') + '>' + (m.checked && m.result !== 'ok' ? '再檢查一次' : '檢查答案') + '</button>' +
@@ -326,7 +338,7 @@
       h += '<div class="pks">' + m.order.map(function (k) {
         var c = s.cards[k], on = m.sel.indexOf(k) > -1, cls = '';
         if (m.checked) { if (on && c.ok) cls = ' right'; else if (on && !c.ok) cls = ' wrong'; }
-        return '<button class="pk' + cls + '" type="button" data-k="' + k + '" aria-pressed="' + on + '"><span class="bx" aria-hidden="true"></span><span>' + c.t + '</span></button>';
+        return '<button class="pk' + cls + '" type="button" data-k="' + k + '" aria-pressed="' + on + '"><span class="bx" aria-hidden="true"></span><span>' + autoPhr(c.t) + '</span></button>';
       }).join('') + '</div>';
       h += '<p class="count">已勾 ' + m.sel.length + ' / ' + s.need + ' 項</p>';
       h += '<div class="actions"><button class="btn" type="button" id="chk"' + (m.sel.length === s.need && m.result !== 'ok' ? '' : ' disabled') + '>' + (m.checked && m.result !== 'ok' ? '再檢查一次' : '檢查答案') + '</button></div>';
@@ -383,7 +395,7 @@
       var m = mem[i] || (mem[i] = { on: [] });
       var h = head(i, s) + paras(s.body);
       h += '<div class="pks">' + s.items.map(function (t, k) {
-        return '<button class="pk" type="button" data-k="' + k + '" aria-pressed="' + (m.on.indexOf(k) > -1) + '"><span class="bx" aria-hidden="true"></span><span>' + t + '</span></button>';
+        return '<button class="pk" type="button" data-k="' + k + '" aria-pressed="' + (m.on.indexOf(k) > -1) + '"><span class="bx" aria-hidden="true"></span><span>' + autoPhr(t) + '</span></button>';
       }).join('') + '</div>';
       h += '<p class="count">' + m.on.length + ' / ' + s.items.length + '</p>';
       return h;
@@ -401,24 +413,34 @@
 
   R.final = {
     render: function (i, s) {
-      return '<div class="deco" aria-hidden="true"></div>' + chip(i) + '<h2 class="title">' + s.title + '</h2>' + paras(s.body) +
+      return '<div class="deco" aria-hidden="true"></div>' + chip(i) + '<h2 class="title">' + phr(s.title) + '</h2>' + paras(s.body) +
+        (s.thanks ? '<p class="chip chip-sm">感謝</p>' + paras([s.thanks]) : '') +
+        (s.credits ? '<ul class="credits">' + s.credits.map(function (c) { return '<li>' + c + '</li>'; }).join('') + '</ul>' : '') +
         '<div class="actions"><button class="btn" type="button" data-go="restart">' + s.btn + '</button></div>';
     }
   };
 
   /* ───── 畫面切換 ───── */
   var curRoot = null;
+  var popIdx = -1;   // 剛被點的按鈕，重新渲染後只讓它彈一下
 
   function renderScreen(i, keepScroll) {
     var f = flat[i], s = f.s, r = R[s.type];
-    var cardCls = 'card' + (s.summary ? ' sum' : '') + (s.type === 'cover' ? ' cover-card' : '');
+    var cardCls = 'card' + (s.summary ? ' sum' : '') + (s.type === 'cover' ? ' cover-card' : '') + (keepScroll ? ' still' : '');
     var h = '<article class="' + cardCls + '" id="card" data-type="' + s.type + '">' + r.render(i, s) + '</article>' +
       '<div class="page-foot"><p class="note">' + SITE.footer + '</p></div>';
     var y = window.pageYOffset;
     html(stage, h);
     watchImages();
     curRoot = $('card');
-    if (keepScroll) window.scrollTo(0, y);
+    if (keepScroll) {
+      window.scrollTo(0, y);
+      if (popIdx > -1) {
+        var btns = curRoot.querySelectorAll('button');
+        if (btns[popIdx]) { btns[popIdx].classList.add('pop'); btns[popIdx].focus({ preventScroll: true }); }
+        popIdx = -1;
+      }
+    }
     return curRoot;
   }
 
@@ -456,6 +478,8 @@
     var g = e.target.closest('[data-go]');
     if (g) { if (g.dataset.go === 'next') go(cur + 1); else if (g.dataset.go === 'restart') { mem = {}; done = {}; choice = {}; go(0); } return; }
     var s = flat[cur].s, r = R[s.type];
+    var hit = e.target.closest('#card button.opt, #card button.zbtn, #card button.stp, #card button.pk, #card button.tile, #card .seg button, #card button.rp-hit, #card button.rp-lic');
+    popIdx = hit ? Array.prototype.indexOf.call($('card').querySelectorAll('button'), hit) : -1;
     if (r.handle) r.handle(e);
   });
 
