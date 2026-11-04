@@ -41,15 +41,6 @@
   font-style: normal;
   font-weight: 200 900;
   font-display: swap;
-  src: url(files/chiron-goround-tc-94-wght-normal.woff2) format('woff2-variations');
-  unicode-range: U+2139,U+2153,U+2194-2197,U+2199,U+219d-219e,U+21a0,U+21a9-21aa,U+21ac,U+21af-21b1,U+21b3-21b5,U+21ba-21bb,U+21c4,U+21ca,U+21cc,U+21d0,U+21d2-21d4,U+21d8,U+21dd,U+21e2-21e9,U+2200,U+2202,U+2205-2208,U+220e-220f,U+2211-2212,U+2215,U+2217-221a,U+221d-2220,U+2225,U+2227-222b,U+222e,U+2234-2237,U+223c-223d,U+2248,U+2256,U+2260-2261,U+2264-2265,U+226a-226b,U+226e-226f,U+2282-2283,U+2295-2296,U+2299,U+22a5,U+22b0-22b1,U+22b9,U+22bf,U+22c5-22c6,U+22c8,U+22d0-22d1,U+22ee,U+2312-2313,U+2318,U+231a-231b,U+2323,U+2328,U+239d,U+23a0,U+23af,U+23e4,U+23e9-23ea,U+23ec,U+23f0-23f3,U+23fa,U+2445,U+2460-2471,U+2474;
-}
-
-@font-face {
-  font-family: 'Chiron GoRound TC';
-  font-style: normal;
-  font-weight: 200 900;
-  font-display: swap;
   src: url(files/chiron-goround-tc-105-wght-normal.woff2) format('woff2-variations');
   unicode-range: U+b4,U+10d,U+2d9,U+641,U+6cc,U+e20,U+e29,U+200e,U+20ac,U+2266,U+25be,U+301e,U+3058,U+4e07,U+4e1d,U+4e66,U+4ece,U+4fde,U+5016,U+5180,U+5199,U+51aa,U+5306,U+5386,U+53d8,U+5413,U+541d,U+5436,U+54ce,U+54e8,U+54fc,U+5571,U+557e,U+558e,U+55a7,U+56a8,U+57a2-57a3,U+58b3,U+5960,U+5992-5993,U+59a4,U+5a55,U+5ab2,U+5afb,U+5b56,U+5bc5,U+5bc7,U+5bf0,U+5cb1,U+5cc7,U+5dff,U+5e93,U+5ed3,U+5f6a,U+60bc,U+61ff,U+6218,U+6254,U+634d,U+6467,U+64f1-64f2,U+6582,U+65fb,U+6615,U+6687,U+66e6,U+66f0,U+6781,U+67f5,U+68a7,U+6a1f,U+6b27,U+6b4e,U+6b73,U+6b79,U+6bcb,U+6c5d,U+6cf5,U+6dee,U+6ec4,U+6ecc,U+6f88,U+6fef,U+701d,U+703e,U+707c,U+7099,U+710a,U+725f,U+72d9,U+72e9,U+731d,U+7325,U+739f,U+7463,U+7480,U+74a8,U+7523,U+7526,U+75e0,U+7613,U+7656,U+76d4,U+773a,U+775c,U+775e,U+780c,U+78e1,U+78f7,U+7960,U+7a20,U+7aaf,U+7b08,U+7b71,U+7be4,U+7cec,U+7cf0,U+7d5e,U+7d62,U+7dbe,U+7e1b,U+7ea2,U+7ec4,U+7ec6,U+7edc,U+7eed,U+7efc,U+7f16,U+7f57,U+7fb9,U+7fca,U+803d,U+816e,U+82a5,U+82b7,U+8317,U+8338,U+834a,U+83d3,U+8401,U+8469,U+849e,U+854a,U+8559,U+865e,U+86e4,U+8700,U+8759,U+8760,U+8778,U+8782,U+879e,U+87d1,U+880d,U+8836,U+8944,U+89c8,U+8aac,U+8b74,U+8ba2,U+8ba4,U+8bae,U+8bfb,U+8c4e,U+8cb3,U+8cb6,U+8d16,U+8d28,U+8e44,U+8f3b,U+8f3f,U+8f91,U+8fb9,U+8fc4,U+8fde,U+8ff9,U+9076,U+90ae,U+90b8,U+9257,U+9310,U+93df,U+94fe,U+95a5,U+95a9,U+962e,U+968f-9690,U+9704,U+9713,U+97f6,U+9824,U+986b,U+9884,U+9886,U+98e2,U+991a,U+99a5,U+99dd,U+9ab8,U+9b41,U+9b77,U+9bad,U+c774,U+e5d4,U+fe52,U+ff02,U+1f389,U+1f449,U+1f495;
 }

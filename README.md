@@ -10,11 +10,16 @@
 |---|---|
 | 程式碼 | [MIT](LICENSE) |
 | 文字（文案、題目） | CC BY 4.0，使用時請標示出處 |
-| 圖片（`images/`） | **保留所有權利，不開源**，詳見 [images/LICENSE.md](images/LICENSE.md) |
+| 插圖（`images/` 內，`09-real-burger-*` 以外，AI 生成） | CC BY 4.0，使用時請標示出處，詳見 [images/LICENSE.md](images/LICENSE.md) |
+| 照片（`images/09-real-burger-*.jpg`） | **不開源。照片僅作本網頁說明範例使用，不開放作為其他用途使用** |
 | 字體 | 昭源環方（Chiron GoRound TC）與 Nunito，皆為 SIL Open Font License 1.1，授權檔在各字體資料夾的 `licenses/` |
 
-歡迎 Fork 這個專案來改。但請把圖片換成你自己的，尤其是食物照片，請自己拍。
+歡迎 Fork 這個專案來改。照片請換成你自己的，尤其是食物照片，請自己拍。
 
 ## AI 使用揭露
 
-本站的圖片由 AI 生成。網頁與文案在 AI 協助下製作。
+本站插圖由 AI 生成。照片為作者拍攝，拍攝後經詢問店家後，同意搭配此網頁內容使用。網頁與文案在 AI 協助下製作。
+
+## 留言板
+
+結語頁的留言板，留言會存在作者的 Google 試算表，公開顯示。後端程式在 `guestbook/Code.gs`。
