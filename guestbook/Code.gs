@@ -40,6 +40,11 @@ function clean_(s, max) {
   return s;
 }
 
+function fmtTime_(v) {   // 試算表有時會把「2026-11-04 10:27」自動轉成日期，這裡統一轉回文字
+  if (Object.prototype.toString.call(v) === '[object Date]') return Utilities.formatDate(v, 'Asia/Taipei', 'yyyy-MM-dd HH:mm');
+  return String(v);
+}
+
 function doGet() {
   var sh = getSheet_();
   var last = sh.getLastRow();
@@ -47,7 +52,7 @@ function doGet() {
   if (last > 1) {
     var n = Math.min(SHOW_LAST, last - 1);
     var rows = sh.getRange(last - n + 1, 1, n, 3).getValues();
-    items = rows.map(function (r) { return { t: String(r[0]), n: String(r[1]), m: String(r[2]) }; }).reverse();
+    items = rows.map(function (r) { return { t: fmtTime_(r[0]), n: String(r[1]), m: String(r[2]) }; }).reverse();
   }
   return json_({ ok: true, items: items });
 }
