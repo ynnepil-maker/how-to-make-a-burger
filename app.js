@@ -411,12 +411,70 @@
     }
   };
 
+  /* ───── 留言板（資料存在使用者自己的 Google 試算表，透過 Apps Script 讀寫） ───── */
+  function guestbookHTML() {
+    var on = !!SITE.guestbookUrl;
+    return '<section class="gb" aria-labelledby="gbH"><h3 id="gbH" class="gb-h">留言板</h3>' +
+      '<p class="note">留言會公開顯示，任何人都看得到。請不要留下電話、住址等個人資料。暱稱 20 字內，留言 100 字內。</p>' +
+      '<form id="gbForm" class="gb-form" autocomplete="off"' + (on ? '' : ' aria-disabled="true"') + '>' +
+      '<label class="gb-l" for="gbNick">暱稱</label><input id="gbNick" class="gb-in" type="text" maxlength="20" required' + (on ? '' : ' disabled') + '>' +
+      '<label class="gb-l" for="gbMsg">留言內容</label><textarea id="gbMsg" class="gb-in gb-ta" maxlength="100" rows="3" required' + (on ? '' : ' disabled') + '></textarea>' +
+      '<input id="gbHp" class="gb-hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+      '<div class="gb-row"><span id="gbCount" class="note" aria-live="off">0 / 100</span><button class="btn" type="submit"' + (on ? '' : ' disabled') + '>送出留言</button></div>' +
+      '<p id="gbStatus" class="note gb-status" role="status">' + (on ? '' : '留言板還沒開放。') + '</p></form>' +
+      '<ul id="gbList" class="gb-list" aria-label="大家的留言"></ul></section>';
+  }
+  function mountGuestbook(root) {
+    var url = SITE.guestbookUrl; if (!url) return;
+    var list = root.querySelector('#gbList'), form = root.querySelector('#gbForm'), st = root.querySelector('#gbStatus');
+    var nick = root.querySelector('#gbNick'), msg = root.querySelector('#gbMsg'), hp = root.querySelector('#gbHp'), cnt = root.querySelector('#gbCount');
+    var last = 0;
+    function item(it) {   // 一律用 textContent，使用者輸入的內容不會被當成 HTML
+      var li = document.createElement('li'); li.className = 'gb-item';
+      var h = document.createElement('p'); h.className = 'gb-meta';
+      var n = document.createElement('b'); n.className = 'gb-nick'; n.textContent = it.n;
+      var t = document.createElement('span'); t.textContent = it.t;
+      h.appendChild(n); h.appendChild(t);
+      var m = document.createElement('p'); m.className = 'gb-text'; m.textContent = it.m;
+      li.appendChild(h); li.appendChild(m); return li;
+    }
+    function show(items) {
+      list.textContent = '';
+      if (!items.length) { var e = document.createElement('li'); e.className = 'gb-empty'; e.textContent = '還沒有留言，你可以當第一個。'; list.appendChild(e); return; }
+      items.forEach(function (it) { list.appendChild(item(it)); });
+    }
+    st.textContent = '載入留言中…';
+    fetch(url).then(function (r) { return r.json(); }).then(function (d) { st.textContent = ''; show(d.items || []); })
+      .catch(function () { st.textContent = '留言載入失敗，請稍後再試。'; });
+    msg.addEventListener('input', function () { cnt.textContent = [...msg.value].length + ' / 100'; });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (Date.now() - last < 15000) { st.textContent = '請稍等一下再送出下一則。'; return; }
+      var n = nick.value.trim(), m = msg.value.trim();
+      if (!n || !m) { st.textContent = '暱稱和留言都要填。'; return; }
+      st.textContent = '送出中…'; last = Date.now();
+      fetch(url, { method: 'POST', body: JSON.stringify({ n: n, m: m, hp: hp.value }) })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (!d.ok) { st.textContent = d.error === 'busy' ? '現在留言的人有點多，請 5 秒後再試。' : '送出失敗，請稍後再試。'; return; }
+          var ph = list.querySelector('.gb-empty'); if (ph) ph.remove();
+          list.insertBefore(item(d.item), list.firstChild);
+          nick.value = n; msg.value = ''; cnt.textContent = '0 / 100'; st.textContent = '已送出，謝謝你的留言。';
+        })
+        .catch(function () { st.textContent = '送出失敗，請稍後再試。'; });
+    });
+  }
+
   R.final = {
     render: function (i, s) {
       return '<div class="deco" aria-hidden="true"></div>' + chip(i) + '<h2 class="title">' + phr(s.title) + '</h2>' + paras(s.body) +
         (s.thanks ? '<p class="chip chip-sm">感謝</p>' + paras([s.thanks]) : '') +
         (s.credits ? '<ul class="credits">' + s.credits.map(function (c) { return '<li>' + c + '</li>'; }).join('') + '</ul>' : '') +
-        '<div class="actions"><button class="btn" type="button" data-go="restart">' + s.btn + '</button></div>';
+        '<div class="actions"><button class="btn" type="button" data-go="restart">' + s.btn + '</button></div>' +
+        (s.guestbook ? guestbookHTML() : '');
+    },
+    mount: function (i, s, root) {
+      if (s.guestbook) mountGuestbook(root);
     }
   };
 
@@ -433,6 +491,7 @@
     html(stage, h);
     watchImages();
     curRoot = $('card');
+    if (R[s.type].mount && !keepScroll) R[s.type].mount(i, s, curRoot);
     if (keepScroll) {
       window.scrollTo(0, y);
       if (popIdx > -1) {

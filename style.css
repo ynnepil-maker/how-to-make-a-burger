@@ -298,3 +298,23 @@ img { display: block; max-width: 100%; }
 .fb.bad, .bub.r, .opt[aria-pressed="true"], .stp[aria-pressed="true"], .pk[aria-pressed="true"] { --hl: #F6E7A8; }  /* 黃色底：更淺、更不飽和的黃 */
 b, strong { font-weight: 700; color: var(--green); background: var(--hl, #EFD477); padding: .04em .22em .06em; margin: 0 .05em; border-radius: .22em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .fb.ok b { color: var(--green); }
+
+/* ───── 留言板 ───── */
+.gb { margin: 26px 0 0; padding-top: 18px; border-top: 2px solid var(--green); }
+.gb-h { margin: 0 0 4px; font-weight: 800; font-size: clamp(20px, 5.4vw, 26px); line-height: 1.3; }
+.gb-form { display: grid; gap: 6px; margin: 12px 0 0; }
+.gb-l { font-weight: 700; margin-top: 6px; }
+.gb-in { width: 100%; font: inherit; font-weight: 500; color: var(--green); background: var(--paper); border: 2px solid var(--green); border-radius: 10px; padding: calc(9px + .07em) 12px calc(9px - .07em); }
+.gb-in:disabled { opacity: .6; }
+.gb-in:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.gb-ta { resize: vertical; min-height: 96px; line-height: 1.6; }
+.gb-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.gb-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
+.gb-row .note { margin: 0; }
+.gb-status { min-height: 1.7em; margin: 4px 0 0; }
+.gb-list { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
+.gb-item { background: var(--paper); border: 2px solid var(--green); border-radius: 10px; padding: 10px 14px 12px; }
+.gb-meta { margin: 0 0 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-size: var(--note-size); letter-spacing: var(--note-ls); color: var(--brown); font-weight: 500; }
+.gb-nick { background: none; padding: 0; margin: 0; font-size: 1.05em; color: var(--green); }
+.gb-text { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
+.gb-empty { color: var(--brown); font-weight: 500; padding: 6px 2px; }
