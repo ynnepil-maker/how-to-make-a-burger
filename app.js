@@ -31,6 +31,11 @@
     if (parts.length < 2) return str;
     return parts.map(function (p) { return [...p].length <= 13 ? '<span class="nb">' + p + '</span>' : p; }).join('');
   }
+  function optInner(text) {
+    var m = /^([A-D])　([\s\S]*)$/.exec(text);
+    if (m) return { lettered: true, html: '<span class="o-key">' + m[1] + '</span><span class="o-tx">' + autoPhr(m[2]) + '</span><span class="mk" aria-hidden="true"></span>' };
+    return { lettered: false, html: '<span class="o-tx">' + autoPhr(text) + '</span><span class="mk" aria-hidden="true"></span>' };
+  }
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function html(el, h) { el.innerHTML = h; }
 
@@ -118,7 +123,8 @@
       h += '<div class="q"><div class="opts" role="group" aria-label="選項">' + s.options.map(function (o, k) {
         var cls = '';
         if (m.pick === k && !s.noFb) cls = o.ok ? ' right' : ' wrong';
-        return '<button class="opt' + cls + '" type="button" data-k="' + k + '" aria-pressed="' + (m.pick === k) + '"><span class="mk" aria-hidden="true"></span><span>' + autoPhr(o.t) + '</span></button>';
+        var oi = optInner(o.t);
+        return '<button class="opt' + (oi.lettered ? ' lettered' : '') + cls + '" type="button" data-k="' + k + '" aria-pressed="' + (m.pick === k) + '">' + oi.html + '</button>';
       }).join('') + '</div></div>';
       h += '<div id="fbBox">' + (m.pick != null && !s.noFb ? fb(s.options[m.pick].ok ? 'ok' : 'bad', s.options[m.pick].fb) : '') + '</div>';
       return h;
@@ -141,12 +147,13 @@
       var m = mem[i] || (mem[i] = { a: [], checked: false, result: null });
       var h = head(i, s);
       h += paras(s.body);
-      if (s.context) h += '<p class="q-ctx">' + s.context + '</p>';
+      if (s.context) h += '<div class="q-ctx"><p class="ctx-lead">' + phr(s.context.lead) + '</p><ol class="ctx-list">' + s.context.items.map(function (t, k) {
+        return '<li><span class="ctx-n">' + (k + 1) + '</span><span class="ctx-t">' + t + '</span></li>'; }).join('') + '</ol></div>';
       h += s.questions.map(function (q, qi) {
         return '<div class="q"><p class="q-t">' + (s.questions.length > 1 ? (qi + 1) + '．' : '') + autoPhr(q.q) + '</p><div class="opts' + (q.options.length <= 4 && q.options.join('').length < 22 ? ' inline' : '') + '" role="group">' + q.options.map(function (o, k) {
           var cls = '';
           if (m.checked && m.a[qi] === k) cls = (k === q.a) ? ' right' : ' wrong';
-          return '<button class="opt' + cls + '" type="button" data-q="' + qi + '" data-k="' + k + '" aria-pressed="' + (m.a[qi] === k) + '"' + (m.result === 'ok' ? ' disabled' : '') + '><span class="mk" aria-hidden="true"></span><span>' + o + '</span></button>';
+          return '<button class="opt' + cls + '" type="button" data-q="' + qi + '" data-k="' + k + '" aria-pressed="' + (m.a[qi] === k) + '"' + (m.result === 'ok' ? ' disabled' : '') + '>' + optInner(o).html + '</button>';
         }).join('') + '</div></div>';
       }).join('');
       var all = s.questions.every(function (q, qi) { return m.a[qi] != null; });
@@ -244,7 +251,7 @@
       var h = head(i, s) + paras(s.body);
       h += s.dims.map(function (d, di) {
         return '<div class="dim"><h3>' + d.h + '</h3><div class="opts inline" role="group" aria-label="' + d.h + '">' + d.o.map(function (o, k) {
-          return '<button class="opt" type="button" data-d="' + di + '" data-k="' + k + '" aria-pressed="' + (m.v[di] === k) + '"><span class="mk" aria-hidden="true"></span><span>' + o + '</span></button>';
+          return '<button class="opt" type="button" data-d="' + di + '" data-k="' + k + '" aria-pressed="' + (m.v[di] === k) + '">' + optInner(o).html + '</button>';
         }).join('') + '</div></div>';
       }).join('');
       var all = s.dims.every(function (d, di) { return m.v[di] != null; });

@@ -147,15 +147,27 @@ img { display: block; max-width: 100%; }
 .opts { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; }
 .opts.inline { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
 .opt {
-  display: flex; gap: 10px; align-items: flex-start; text-align: left; cursor: pointer; width: 100%;
+  /* 版面邏輯：
+     ・一般選項：文字區塊在框內置中（不管幾行）。
+     ・有 A/B/C 字母的選項：字母＋文字區塊成一組，齊左；文字多行時，第二行跟第一行的文字對齊，不會跑到字母底下。
+     ・打勾／打叉的圓章用絕對定位貼在右上角，不佔版面，所以出現或消失時文字不會位移。 */
+  position: relative; display: flex; gap: .7em; align-items: center; justify-content: center; text-align: center; cursor: pointer; width: 100%;
   background: var(--paper); border: 2px solid var(--green); border-radius: 10px; padding: calc(10px + .13em) 14px calc(10px - .13em); line-height: 1.55; font-weight: 600;
 }
+.opt .o-tx { display: block; min-width: 0; }
+.opt.lettered { justify-content: flex-start; align-items: flex-start; text-align: left; }
+.opt.lettered .o-tx { flex: 1; }
+.opt .o-key { flex: none; font-weight: 800; min-width: 1.1em; }
 @media (hover: hover) { .opt:hover:not(:disabled):not(.right):not(.wrong) { background: var(--yellow); } }
-.opt .mk { flex: none; width: 1.4em; font-weight: 800; }
 .opt[aria-pressed="true"] { background: var(--yellow); box-shadow: inset 0 0 0 2px var(--green); }
+.opt .mk { position: absolute; top: -9px; right: -7px; width: 22px; height: 22px; box-sizing: border-box; display: none; place-items: center; border-radius: 50%; border: 2px solid var(--green); font-size: 12px; font-weight: 800; line-height: 1; text-decoration: none; }
+.opt.right .mk, .opt.wrong .mk { display: grid; }
 .opt.right { background: var(--green); color: var(--cream); }
+.opt.right .mk { background: var(--cream); color: var(--green); }
 .opt.right .mk::before { content: "✓"; }
-.opt.wrong { background: var(--paper); border-style: dashed; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.opt.wrong { background: var(--paper); border-style: dashed; }
+.opt.wrong .o-tx { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.opt.wrong .mk { background: var(--yellow); color: var(--green); }
 .opt.wrong .mk::before { content: "✗"; }
 .opt:disabled { cursor: default; }
 
@@ -318,3 +330,13 @@ b, strong { font-weight: 700; color: var(--green); background: var(--hl, #EFD477
 .gb-nick { background: none; padding: 0; margin: 0; font-size: 1.05em; color: var(--green); }
 .gb-text { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
 .gb-empty { color: var(--brown); font-weight: 500; padding: 6px 2px; }
+
+/* 題目引言：每一句各一行，編號＋文字區塊成一組，第二行跟第一行文字對齊 */
+.q-ctx { padding: 12px 16px; }
+.ctx-lead { margin: 0 0 6px; }
+.ctx-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ctx-list li { display: flex; gap: .7em; align-items: flex-start; }
+.ctx-n { flex: none; min-width: 1.1em; font-weight: 800; text-align: left; }
+.ctx-t { flex: 1; min-width: 0; text-align: left; }
+.g4 h3 { display: flex; align-items: center; gap: .5em; }
+.g4 h3::before { flex: none; margin-right: 0; }
